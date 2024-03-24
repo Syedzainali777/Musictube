@@ -1,19 +1,23 @@
-import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
+class ApiError extends Error {
+  constructor(
+    statusCode,
+    message = "Something went wrong",
+    errors = [],
+    statck = ""
+  ) {
+    super(message);
+    this.statusCode = statusCode;
+    this.data = null;
+    this.message = message;
+    this.success = false;
+    this.errors = errors;
 
-const app = express();
+    if (statck) {
+      this.stack = statck;
+    } else {
+      Error.captureStackTrace(this, this.constructor);
+    }
+  }
+}
 
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-    credentials: true,
-  })
-);
-
-app.use(express.json({ limit: "16kb" }));
-app.use(express.urlencoded({ extended: true, limit: "16kb" }));
-app.use(express.static("public"));
-app.use(cookieParser());
-
-export { app };
+export { ApiError };
