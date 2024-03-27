@@ -1,6 +1,7 @@
-import { Express } from "express";
+import express from "express"; // Use default import syntax
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import userRouter from "./routes/user.routes.js"; // Import your user router
 
 const app = express();
 
@@ -12,8 +13,11 @@ app.use(
 );
 
 app.use(express.json({ limit: "16KB" }));
-app.use(express.unlencoded({ extended: "true", limit: "16KB" }));
+app.use(express.urlencoded({ extended: true, limit: "16KB" })); // Corrected the typo here
 app.use(express.static("Public"));
 app.use(cookieParser());
 
-export { app };
+// Register your userRouter
+app.use("/api/v1/users", userRouter);
+
+export default app;
